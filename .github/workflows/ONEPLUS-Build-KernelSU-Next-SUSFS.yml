@@ -101,7 +101,6 @@ jobs:
          else
          ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
          fi
-      fi
          
       - name: Make AnyKernel3
         run: |
