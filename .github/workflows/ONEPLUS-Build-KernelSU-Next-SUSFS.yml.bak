@@ -95,15 +95,7 @@ jobs:
            cd ./KernelSU-Next
            cp ../kernel_patches/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
            patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
-      
-      - name: Apply New Hooks Patches
-        run: |
-          cd kernel_workspace/kernel_platform/common
-          cp ../../kernel_patches/hooks/new_hooks.patch ./
-          echo "正在打vfs补丁"
-          patch -p1 -F 3 < new_hooks.patch
-          echo "完成"
-          
+
       - name: Build kernel
         run: |
          cd kernel_workspace
