@@ -95,6 +95,24 @@ jobs:
            cd ./KernelSU-Next
            cp ../../kernel_patches/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
            patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
+
+      - name: Apply New Hooks Patches
+        if: ${{ github.event.inputs.VFS_patch_ENABLED == 'enable' }}
+        run: |
+          cd kernel_workspace/kernel_platform/common
+          cp ../../kernel_patches/hooks/new_hooks.patch ./
+          echo "正在打vfs补丁"
+          patch -p1 -F 3 < new_hooks.patch
+          echo "完成"
+
+      - name: Add SUSFS Configuration Settings
+        run: |
+          cd kernel_workspace/kernel_platform
+          echo "CONFIG_KSU_WITH_KPROBES=n" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
+          # Remove check_defconfig
+          sed -i 's/check_defconfig//' ./common/build.config.gki
+
           
       - name: Build kernel
         run: |
