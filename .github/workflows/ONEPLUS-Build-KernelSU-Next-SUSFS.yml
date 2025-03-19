@@ -100,7 +100,7 @@ jobs:
         if: ${{ github.event.inputs.VFS_patch_ENABLED == 'enable' }}
         run: |
           cd kernel_workspace/kernel_platform/common
-          cp ../../kernel_patches/hooks/new_hooks.patch ./
+          cp ../../kernel_patches/next/syscall_hooks.patch ./
           echo "正在打vfs补丁"
           patch -p1 -F 3 < new_hooks.patch
           echo "完成"
