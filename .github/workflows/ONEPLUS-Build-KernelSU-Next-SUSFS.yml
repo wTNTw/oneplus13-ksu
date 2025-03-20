@@ -90,8 +90,7 @@ jobs:
            cp ../../kernel_patches/69_hide_stuff.patch ./
            cp ../../kernel_patches/next/syscall_hooks.patch ./
            patch -p1 -F 3 < 69_hide_stuff.patch
-           patch -p1 -F 3 < syscall_hooks.patch
-           git add -A && git commit -a -m "BUILD Kernel"
+           patch -p1 -F 3 < syscall_hooks.patch         
            cd ..
            
            cd ./KernelSU-Next
@@ -126,6 +125,8 @@ jobs:
          
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
+          cd common
+          git add -A && git commit -a -m "BUILD Kernel"
 
           
       - name: Build kernel
