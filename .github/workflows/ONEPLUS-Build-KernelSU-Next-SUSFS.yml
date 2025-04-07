@@ -77,7 +77,7 @@ jobs:
       - name: Set up susfs
         run: |
            cd kernel_workspace
-           if [ "${{ github.event.inputs.CPUD }}" = "sm8750" ]; then
+           if [ "${{ github.event.inputs.CPU }}" = "sm8750" ]; then
             git clone https://github.com/JiuGeFaCai/susfs4ksu.git
            else
             git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
@@ -138,7 +138,7 @@ jobs:
          cd kernel_workspace
          if [ -e ./kernel_platform/build/build.sh ]; then
          LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
-         elif [ "${{ github.event.inputs.CPUD }}" = "sm8750" ]; then
+         elif [ "${{ github.event.inputs.CPU }}" = "sm8750" ]; then
          ./kernel_platform/oplus/build/oplus_build_kernel.sh sun perf
          else
          ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
