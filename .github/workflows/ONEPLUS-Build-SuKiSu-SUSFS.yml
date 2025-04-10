@@ -22,6 +22,10 @@ on:
         description: "内核版本"
         required: true
         default: '6.1'
+      KERNEL_NAME:
+        description: "修改内核名称"
+        required: true
+        default: '-android14-11-o-g96906c366ea0'
 
 jobs:
   build:
@@ -67,12 +71,12 @@ jobs:
          
       - name: Set up KernelSU Next
         run: |
-         cd kernel_workspace/kernel_platform
-         curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
-         cd KernelSU-Next
-         KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
+         curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-dev
+         cd ./KernelSU
+         KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+         export KSU_VERSION=$KSU_VERSION
+         sed -i "s/DKSU_VERSION=12500/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
         
       - name: Set up susfs
         run: |
@@ -82,7 +86,7 @@ jobs:
            else
             git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
            fi 
-           git clone https://github.com/TheWildJames/kernel_patches.git
+           git clone https://github.com/ShirkNeko/SukiSU_patch.git
            cd kernel_platform        
            cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
@@ -92,23 +96,19 @@ jobs:
            cd ./common       
            patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
            # cp ../../kernel_patches/69_hide_stuff.patch ./
-           cp ../../kernel_patches/next/syscall_hooks.patch ./
+           cp ../../SukiSU_patch/hooks/new_hooks.patch ./
            # patch -p1 -F 3 < 69_hide_stuff.patch
-           patch -p1 -F 3 < syscall_hooks.patch         
-           cd ..
+           patch -p1 -F 3 < new_hooks.patch
            
-           cd ./KernelSU-Next
-           cp ../../kernel_patches/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
-           patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
-
       - name: Add SUSFS Configuration Settings
         run: |
           cd kernel_workspace/kernel_platform
-          echo "CONFIG_KSU_WITH_KPROBES=n" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
-          
-          # Add KSU configuration settings
           echo "CONFIG_KSU=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_KPM=y" >> ./common/arch/arm64/configs/gki_defconfig
+
+          # Add VFS configuration settings
+          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./common/arch/arm64/configs/gki_defconfig
           
           # Add SUSFS configuration settings
           echo "CONFIG_KSU_SUSFS=y" >> ./common/arch/arm64/configs/gki_defconfig
@@ -131,8 +131,12 @@ jobs:
           sed -i 's/check_defconfig//' ./common/build.config.gki
           cd common
           git add -A && git commit -a -m "BUILD Kernel"
-
           
+      - name: Add make name
+        run: |
+         cd kernel_workspace/kernel_platform
+         sed -i '$s|echo "\$res"|echo "\${{ github.event.inputs.KERNEL_NAME }}"|' ./common/scripts/setlocalversion
+           
       - name: Build kernel
         run: |
          cd kernel_workspace
@@ -146,9 +150,14 @@ jobs:
          
       - name: Make AnyKernel3
         run: |
-         git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1
+         git clone https://github.com/WildPlusKernel/AnyKernel3.git --depth=1
          rm -rf ./AnyKernel3/.git
-         cp kernel_workspace/out/dist/Image ./AnyKernel3/
+         cd kernel_workspace/out/dist/
+         curl -LO https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
+         chmod +x patch_linux
+         rm -f Image
+         mv oImage Image
+         cp Image ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
