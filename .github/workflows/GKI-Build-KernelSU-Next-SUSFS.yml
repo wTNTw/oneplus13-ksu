@@ -126,6 +126,7 @@ jobs:
          cp $OUTDIR/Image ./output/
          curl -LO https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
          chmod +x patch_linux
+         ./patch_linux
          rm -f Image
          mv oImage Image
          git clone https://github.com/WildPlusKernel/AnyKernel3.git --depth=1
