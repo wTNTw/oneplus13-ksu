@@ -148,18 +148,21 @@ jobs:
          else
          ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
          fi
-         
+
       - name: Make AnyKernel3
         run: |
-         git clone https://github.com/WildPlusKernel/AnyKernel3.git --depth=1
-         rm -rf ./AnyKernel3/.git
          cd kernel_workspace/out/dist/
          curl -LO https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
          chmod +x patch_linux
          ./patch_linux
          rm -f Image
          mv oImage Image
-         cp Image ../../AnyKernel3/
+         
+      - name: Make AnyKernel3
+        run: |
+         git clone https://github.com/WildPlusKernel/AnyKernel3.git --depth=1
+         rm -rf ./AnyKernel3/.git
+         cp Image ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
