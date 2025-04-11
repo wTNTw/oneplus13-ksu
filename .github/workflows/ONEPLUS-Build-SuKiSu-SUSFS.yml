@@ -162,7 +162,7 @@ jobs:
         run: |
          git clone https://github.com/WildPlusKernel/AnyKernel3.git --depth=1
          rm -rf ./AnyKernel3/.git
-         cp Image ./AnyKernel3/
+         cp kernel_workspace/out/dist/Image ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
