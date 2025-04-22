@@ -105,8 +105,7 @@ jobs:
            cp ../../SukiSU_patch/namespace.c ./fs
            echo "完成"
 
-      - name: Apply New Hooks Patches
-        if: ${{ github.event.inputs.VFS_patch_ENABLED == 'enable' }}
+      - name: Apply lz4kd Patches
         run: |
           cd kernel_workspace/kernel_platform/common
           cp ../../SukiSU_patch/other/lz4k_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
