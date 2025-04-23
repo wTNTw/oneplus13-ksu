@@ -25,7 +25,7 @@ on:
       KERNEL_NAME:
         description: "修改内核名称"
         required: true
-        default: '-android15-8-g013ec21bba94-abogki383916444-lz4kd'
+        default: '-android15-8-g013ec21bba94-abogki383916444'
       RELEASE_TAG:  # 新增输入参数
         description: "Release标签 (例如: v1.0.0)"
         required: true
