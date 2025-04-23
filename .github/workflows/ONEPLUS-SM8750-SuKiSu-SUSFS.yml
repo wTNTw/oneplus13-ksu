@@ -162,7 +162,7 @@ jobs:
          cd kernel_workspace/kernel_platform
          tools/bazel run --config=fast --config=stamp --lto=thin //common:kernel_aarch64_dist -- --dist_dir=dist
 
-      - name: Make AnyKernel3
+      - name: Prepare AnyKernel3
         run: |
          cd kernel_workspace/kernel_platform/dist/
          curl -LO https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
@@ -194,7 +194,7 @@ jobs:
          name: Image_SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}
          path: kernel_workspace/kernel_platform/dist/Image
          
-      - name: Create Release and Upload Assets  # 新增发布步骤
+      - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1
         with:
@@ -208,6 +208,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            AnyKernel3/*
-            Image
+            kernel_workspace/kernel_platform/dist/AnyKernel3/*
+            kernel_workspace/kernel_platform/dist/Image
           working-directory: kernel_workspace/kernel_platform/dist/  # 指定文件路径
