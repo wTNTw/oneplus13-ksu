@@ -208,6 +208,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            kernel_workspace/kernel_platform/dist/AnyKernel3/*
-            kernel_workspace/kernel_platform/dist/Image
+            AnyKernel3/*
+            Image
           working-directory: kernel_workspace/kernel_platform/dist/  # 指定文件路径
