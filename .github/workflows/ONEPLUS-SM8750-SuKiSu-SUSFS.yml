@@ -194,14 +194,16 @@ jobs:
          name: Image_SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}
          path: kernel_workspace/kernel_platform/dist/Image
 
-      - name: Zip Artifact for Release
-  run: |
-    cd ./AnyKernel3/
-    zip -r "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip" *
+      - name: Rename Artifact for Release
+        run: |  # 明确声明 run 字段
+          cd kernel_workspace/kernel_platform/dist/AnyKernel3
+          mkdir -p "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
+          cp -r * "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/"
+          rm -rf !("SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}")  # 清理旧文件
    
       - name: Create Release and Upload Assets
         if: ${{ success() }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
         with:
           tag_name: ${{ github.event.inputs.RELEASE_TAG }}
           name: "SuKiSu Release ${{ github.event.inputs.RELEASE_TAG }}"
@@ -213,4 +215,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-      ./AnyKernel3//SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+            kernel_workspace/kernel_platform/dist/AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/*
