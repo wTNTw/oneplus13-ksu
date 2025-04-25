@@ -193,7 +193,12 @@ jobs:
         with:
          name: Image_SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}
          path: kernel_workspace/kernel_platform/dist/Image
-         
+
+      - name: Zip Artifact for Release
+  run: |
+    cd kernel_workspace/kernel_platform/dist/AnyKernel3
+    zip -r "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip" *
+   
       - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1
@@ -208,6 +213,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            AnyKernel3/*
-            Image
-          working-directory: kernel_workspace/kernel_platform/dist/  # 指定文件路径
+      kernel_workspace/kernel_platform/dist/AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
