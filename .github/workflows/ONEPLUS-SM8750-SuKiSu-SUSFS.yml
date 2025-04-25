@@ -196,7 +196,7 @@ jobs:
 
       - name: Zip Artifact for Release
   run: |
-    cd kernel_workspace/kernel_platform/dist/AnyKernel3
+    cd ./AnyKernel3/
     zip -r "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip" *
    
       - name: Create Release and Upload Assets
@@ -213,4 +213,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-      kernel_workspace/kernel_platform/dist/AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+      ./AnyKernel3//SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
