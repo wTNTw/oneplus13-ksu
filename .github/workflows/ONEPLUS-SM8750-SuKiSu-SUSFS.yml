@@ -168,7 +168,6 @@ jobs:
          
       - name: Make AnyKernel3
         run: |
-         cd kernel_workspace/kernel_platform/dist/  # 确保进入dist目录
          if [ "${{ github.event.inputs.FEIL }}" = "oneplus_ace5_pro" ]; then
           git clone -b a5p https://github.com/JiuGeFaCai/AnyKernel3.git --depth=1
          else
@@ -176,7 +175,7 @@ jobs:
          fi
          rm -rf ./AnyKernel3/.git
          rm -rf ./AnyKernel3/push.sh
-         cp Image ./AnyKernel3/
+         cp kernel_workspace/kernel_platform/dist/Image ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
@@ -192,7 +191,7 @@ jobs:
 
       - name: Rename Artifact for Release
         run: |  # 明确声明 run 字段
-          cd kernel_workspace/kernel_platform/dist/AnyKernel3 || { echo "错误：AnyKernel3目录不存在"; exit 1; }
+          cd ./AnyKernel3 || { echo "错误：AnyKernel3目录不存在"; exit 1; }
           shopt -s extglob
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
           mkdir -p "$target_dir"
