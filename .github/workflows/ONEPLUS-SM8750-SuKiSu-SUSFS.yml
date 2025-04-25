@@ -199,6 +199,13 @@ jobs:
           rm -rf !("$target_dir")
           echo "目录结构验证：" && ls -l  # 添加调试信息
    
+      - name: Package Release to ZIP
+        run: |
+          cd ./AnyKernel3
++         target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
++         zip -r "${target_dir}.zip" "$target_dir"  # 压缩目录为ZIP
++         echo "生成ZIP文件：" && ls -lh *.zip  # 验证ZIP文件
+
       - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
