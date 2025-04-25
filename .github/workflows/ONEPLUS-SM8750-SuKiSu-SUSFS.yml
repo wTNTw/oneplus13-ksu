@@ -191,7 +191,7 @@ jobs:
 
       - name: Rename Artifact for Release
         run: |  # 明确声明 run 字段
-          cd ./AnyKernel3/
+          cd kernel_workspace/kernel_platform/dist/AnyKernel3
           shopt -s extglob  # 启用Bash扩展通配符
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
           mkdir -p "$target_dir"
