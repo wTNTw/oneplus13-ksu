@@ -192,10 +192,12 @@ jobs:
 
       - name: Rename Artifact for Release
         run: |  # 明确声明 run 字段
-          cd kernel_workspace/kernel_platform/dist/AnyKernel3
-          mkdir -p "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
-          cp -r * "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/"
-          rm -rf !("SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}")  # 清理旧文件
+          cd ./AnyKernel3/
+          shopt -s extglob  # 启用Bash扩展通配符
+          target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
+          mkdir -p "$target_dir"
+          cp -r !("$target_dir") "$target_dir/"  # 复制除目标目录外的所有文件
+          rm -rf !("$target_dir")  # 删除除目标目录外的所有文件
    
       - name: Create Release and Upload Assets
         if: ${{ success() }}
