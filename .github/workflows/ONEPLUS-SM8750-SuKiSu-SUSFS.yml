@@ -26,10 +26,6 @@ on:
         description: "修改内核名称"
         required: true
         default: '-android15-8-g013ec21bba94-abogki383916444'
-      RELEASE_TAG:  # 新增输入参数
-        description: "Release标签 (例如: v1.0.0)"
-        required: true
-        default: 'v1.0.0'
 
 jobs:
   build:
@@ -205,7 +201,7 @@ jobs:
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
         with:
-          tag_name: ${{ github.event.inputs.RELEASE_TAG }}
+          tag_name: ${{ env.KSUVER }}
           name: "SuKiSu Release ${{ github.event.inputs.RELEASE_TAG }}"
           body: |
             Build Details:
