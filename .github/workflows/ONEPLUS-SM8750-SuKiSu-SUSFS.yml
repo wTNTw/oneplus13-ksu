@@ -202,10 +202,12 @@ jobs:
       - name: Package Release to ZIP                
         run: |
           cd ./AnyKernel3 || { echo "&#10060; 错误：AnyKernel3 目录不存在"; exit 1; }
-          echo "当前目录内容：" && ls -la          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"          
-          echo "目标 ZIP 文件: ${target_zip}"          # 直接打包目标子目录（保持目录结构）
+          echo "当前目录内容：" && ls -la
+          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"          
+          echo "目标 ZIP 文件: ${target_zip}"
           zip -r "${target_zip}" "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" \
-            && echo "&#9989; ZIP 打包成功" \            || { echo "&#10060; ZIP 打包失败"; exit 1; }
+            && echo "&#9989; ZIP 打包成功"\ 
+           || { echo "&#10060; ZIP 打包失败"; exit 1; }
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
       - name: Create Release and Upload Assets        
