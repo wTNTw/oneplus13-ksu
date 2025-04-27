@@ -204,7 +204,7 @@ jobs:
           cd ./AnyKernel3
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
           zip -r "${target_zip}" *
-          echo "生成ZIP文件：" && ls -lh *.zip  # 验证ZIP文件
+          echo "生成ZIP文件：" && ls -lh "${target_zip}"  # 验证ZIP文件
 
       - name: Create Release and Upload Assets
         if: ${{ success() }}
