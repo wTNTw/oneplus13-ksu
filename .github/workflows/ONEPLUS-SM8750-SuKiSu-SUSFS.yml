@@ -210,7 +210,7 @@ jobs:
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
         with:
-          tag_name: SuKiSu $ {{ env.KSUVER }}
+          tag_name: $ {{ env.KSUVER }}
           name: "SuKiSu Release ${{ github.event.inputs.FEIL }}
           body: |
             Build Details:
