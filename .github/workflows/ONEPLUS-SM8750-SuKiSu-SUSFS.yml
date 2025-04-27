@@ -218,7 +218,7 @@ jobs:
         run: |
           ls -la ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
           if [ ! -f ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip ]; then
-            echo "&#10060; ZIP 文件未找到"
+            echo "ZIP 文件未找到"
             exit 1
           fi
 
