@@ -200,29 +200,19 @@ jobs:
           echo "目录结构验证：" && ls -l  # 添加调试信息
    
       - name: Package Release to ZIP
-  run: |
-    # 确保进入目录并检查是否存在
-    cd ./AnyKernel3 || { echo "❌ 错误：AnyKernel3 目录不存在"; exit 1; }
+        run: |
+        cd ./AnyKernel3 || { echo "❌ 错误：AnyKernel3 目录不存在"; exit 1; }
+        echo "当前目录内容：" && ls -la
+        target_zip="SuKiSu_${{ env.KSUVER }}_${FEIL// /_}.zip"
+        echo "目标 ZIP 文件: ${target_zip}"
+        if [ -d "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}" ]; then
+        echo "⚠️ 检测到旧目录，尝试删除残留..."
+        rm -rf "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}"
+        fi
     
-    # 调试输出目录内容
-    echo "当前目录内容：" && ls -la
-    
-    # 动态生成 ZIP 文件名（替换空格为下划线）
-    target_zip="SuKiSu_${{ env.KSUVER }}_${FEIL// /_}.zip"
-    echo "目标 ZIP 文件: ${target_zip}"
-    
-    # 压缩时排除自身同名目录（避免循环打包）
-    if [ -d "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}" ]; then
-      echo "⚠️ 检测到旧目录，尝试删除残留..."
-      rm -rf "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}"
-    fi
-    
-    # 压缩当前目录所有内容（不包含隐藏文件）
-    zip -r -j "${target_zip}" ./* || { echo "❌ 压缩失败"; exit 1; }
-    
-    # 验证 ZIP 文件
-    echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
-    echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
+        zip -r -j "${target_zip}" ./* || { echo "❌ 压缩失败"; exit 1; }
+        echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
+        echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
       - name: Create Release and Upload Assets
         if: ${{ success() }}
