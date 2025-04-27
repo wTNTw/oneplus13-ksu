@@ -193,22 +193,26 @@ jobs:
         run: |
           cd ./AnyKernel3 || { echo "错误：AnyKernel3目录不存在"; exit 1; }
           shopt -s extglob
+          shopt -s dotglob  # 关键修复：包含隐藏文件
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
           mkdir -p "$target_dir"
-          cp -r !("$target_dir") "$target_dir/"
-          rm -rf !("$target_dir")
-          echo "目录结构验证：" && ls -l
+          cp -r !("$target_dir") "$target_dir/" || { echo "文件复制失败"; exit 1; }
+          echo "验证目标目录内容：" && ls -l "$target_dir"  # 新增目录内容检查
 
       - name: Package Release to ZIP                
         run: |
           cd ./AnyKernel3 || { echo "❌ 错误：AnyKernel3 目录不存在"; exit 1; }
           target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
           dir_name="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
-    
-          (cd "$dir_name" && zip -r "../$target_zip" 。 ) || { echo "❌ ZIP打包失败"; exit 1; }
-    
+
+          if [ ! -d "$dir_name" ]; then
+          echo "❌ 致命错误：打包目录 $dir_name 不存在"
+          exit 1
+          fi
+          echo "预压缩目录结构：" && tree "$dir_name"
+          (cd "$dir_name" && zip -r "../$target_zip" * ) || { echo "❌ ZIP打包失败"; exit 1; }
           echo "✅ ZIP打包成功"
-          echo "生成ZIP文件大小：" && ls -lh "$target_zip"
+          echo "压缩包详细信息：" && unzip -l "$target_zip"
 
       - name: Create Release and Upload Assets        
         if: ${{ success() }}
