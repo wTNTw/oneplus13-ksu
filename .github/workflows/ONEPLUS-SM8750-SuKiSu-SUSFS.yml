@@ -214,6 +214,14 @@ jobs:
           echo "✅ ZIP打包成功"
           echo "压缩包详细信息：" && unzip -l "$target_zip"
 
+      - name: Verify ZIP File Exists
+        run: |
+          ls -la ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+          if [ ! -f ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip ]; then
+            echo "&#10060; ZIP 文件未找到"
+            exit 1
+          fi
+
       - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1
