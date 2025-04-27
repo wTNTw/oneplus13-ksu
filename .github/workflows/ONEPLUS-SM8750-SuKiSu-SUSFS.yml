@@ -206,8 +206,8 @@ jobs:
           target_zip="SuKiSu_${{ env.KSUVER }}_${FEIL// /_}.zip"
           echo "目标 ZIP 文件: ${target_zip}"
           if [ -d "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}" ]; then
-        echo "⚠️ 检测到旧目录，尝试删除残留..."
-        rm -rf "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}"
+            echo "⚠️ 检测到旧目录，尝试删除残留..."
+            rm -rf "SuKiSu_${{ env.KSUVER }}_${FEIL// /_}"
           fi
     
           zip -r -j "${target_zip}" ./* || { echo "❌ 压缩失败"; exit 1; }
