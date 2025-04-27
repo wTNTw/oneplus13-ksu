@@ -205,8 +205,10 @@ jobs:
           echo "当前目录内容：" && ls -la
           target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
           echo "目标 ZIP 文件: ${target_zip}"
-          rm -f "${target_zip}"
-          (cd .. && zip -r "AnyKernel3/${target_zip}" ./AnyKernel3/*)
+          temp_dir=$(mktemp -d)
+          rsync -av --progress ./SuKiSu/            "$temp_dir/"  # 将 SuKiSu 子目录内容同步到临时目录
+          (cd "$temp_dir" && zip -r "../${target_zip}" ./*)
+          rm -rf "$temp_dir"
           echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
