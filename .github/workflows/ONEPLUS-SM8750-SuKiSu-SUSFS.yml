@@ -205,12 +205,8 @@ jobs:
           echo "当前目录内容：" && ls -la
           target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
           echo "目标 ZIP 文件: ${target_zip}"
-          if [ -d "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}" ]; then
-            echo "⚠️ 检测到旧目录，尝试删除残留..."
-            rm -rf "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
-          fi
-    
-          zip -r -j "${target_zip}" ./* || { echo "❌ 压缩失败"; exit 1; }
+          rm -f "${target_zip}"
+          (cd .. && zip -r "AnyKernel3/${target_zip}" ./AnyKernel3/*)
           echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
