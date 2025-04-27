@@ -206,8 +206,8 @@ jobs:
           target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"          
           echo "目标 ZIP 文件: ${target_zip}"
           zip -r "${target_zip}" "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" \
-            && echo "&#9989; ZIP 打包成功"\ 
-            || { echo "&#10060; ZIP 打包失败"; exit 1; }
+            && echo "✅ ZIP 打包成功" \
+            || { echo "❌ ZIP 打包失败"; exit 1; }
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
       - name: Create Release and Upload Assets        
