@@ -203,15 +203,15 @@ jobs:
         run: |
           cd ./AnyKernel3
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
-          zip -r "${target_dir}.zip" "$target_dir"  # 压缩目录为ZIP
+          zip -r "${target_zip}" *
           echo "生成ZIP文件：" && ls -lh *.zip  # 验证ZIP文件
 
       - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
         with:
-          tag_name: SuKiSu Release
-          name: "SuKiSu Release ${{ env.KSUVER }}
+          tag_name: SuKiSu $ {{ env.KSUVER }}
+          name: "SuKiSu Release ${{ github.event.inputs.FEIL }}
           body: |
             Build Details:
             - CPU: ${{ github.event.inputs.CPU }}
