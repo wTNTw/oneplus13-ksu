@@ -190,25 +190,25 @@ jobs:
          path: kernel_workspace/kernel_platform/dist/Image
 
       - name: Rename Artifact for Release
-        run: |  # 明确声明 run 字段
+        run: |
           cd ./AnyKernel3 || { echo "错误：AnyKernel3目录不存在"; exit 1; }
           shopt -s extglob
           target_dir="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
           mkdir -p "$target_dir"
           cp -r !("$target_dir") "$target_dir/"
           rm -rf !("$target_dir")
-          echo "目录结构验证：" && ls -l  # 添加调试信息
-   
+          echo "目录结构验证：" && ls -l
+
       - name: Package Release to ZIP                
         run: |
-          cd ./AnyKernel3 || { echo "&#10060; 错误：AnyKernel3 目录不存在"; exit 1; }
-          echo "当前目录内容：" && ls -la
-          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"          
-          echo "目标 ZIP 文件: ${target_zip}"
-          zip -r "${target_zip}" "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" \
-            && echo "✅ ZIP 打包成功" \
-            || { echo "❌ ZIP 打包失败"; exit 1; }
-          echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
+          cd ./AnyKernel3 || { echo "❌ 错误：AnyKernel3 目录不存在"; exit 1; }
+          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
+          dir_name="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}"
+    
+          (cd "$dir_name" && zip -r "../$target_zip" 。 ) || { echo "❌ ZIP打包失败"; exit 1; }
+    
+          echo "✅ ZIP打包成功"
+          echo "生成ZIP文件大小：" && ls -lh "$target_zip"
 
       - name: Create Release and Upload Assets        
         if: ${{ success() }}
@@ -221,7 +221,7 @@ jobs:
             - CPU: ${{ github.event.inputs.CPU }}
             - FEIL: ${{ github.event.inputs.FEIL }}
             - KSU Version: ${{ env.KSUVER }}
-          draft: false
-          prerelease: false
-          files: |
-            ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+            draft: false
+            prerelease: false
+            files: |
+              ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
