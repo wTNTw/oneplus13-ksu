@@ -224,7 +224,9 @@ jobs:
       - name: Create Release and Upload Assets
         if: ${{ success() }}
         uses: softprops/action-gh-release@v1
-        with:          tag_name: Release          name: "SuKiSu Release ${{ env.KSUVER }}"
+        with:
+          tag_name: Release
+          name: "SuKiSu Release ${{ env.KSUVER }}"
           body: |
             Build Details:
             - CPU: ${{ github.event.inputs.CPU }}
