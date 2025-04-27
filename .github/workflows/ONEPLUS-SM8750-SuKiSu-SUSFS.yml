@@ -205,14 +205,10 @@ jobs:
           echo "当前目录内容：" && ls -la
           target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
           echo "目标 ZIP 文件: ${target_zip}"
-          if [ ! -d "./SuKiSu" ]; then
-          echo "❌ 错误：SuKiSu 目录不存在于 AnyKernel3 中"
-          exit 1
-          fi
 
           temp_dir=$(mktemp -d)
           anykernel_dir=$(pwd)  # 获取 AnyKernel3 的绝对路径
-          rsync -av --progress "${anykernel_dir}/SuKiSu/" "$temp_dir/" || { echo "❌ rsync 同步失败"; exit 1; }
+          rsync -av --progress "${anykernel_dir}/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" "$temp_dir/" || { echo "❌ rsync 同步失败"; exit 1; }
           (cd "$temp_dir" && zip -r "../${target_zip}" ./*)  # 注意路径调整
           rm -rf "$temp_dir"
           echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
