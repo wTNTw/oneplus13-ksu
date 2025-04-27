@@ -211,7 +211,6 @@ jobs:
           rsync -av --progress "${anykernel_dir}/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" "$temp_dir/" || { echo "❌ rsync 同步失败"; exit 1; }
           (cd "$temp_dir" && zip -r "../${target_zip}" ./*)  # 注意路径调整
           rm -rf "$temp_dir"
-          echo "生成 ZIP 文件结构：" && unzip -l "${target_zip}"
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
       - name: Create Release and Upload Assets
