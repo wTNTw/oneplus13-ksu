@@ -214,18 +214,24 @@ jobs:
           echo "✅ ZIP打包成功"
           echo "压缩包详细信息：" && unzip -l "$target_zip"
 
-      - name: Create Release and Upload Assets        
+      - name: Verify ZIP File Exists
+        run: |
+          ls -la ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+          if [ ! -f ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip ]; then
+            echo "&#10060; ZIP 文件未找到"
+            exit 1
+          fi
+      - name: Create Release and Upload Assets
         if: ${{ success() }}
-        uses: softprops/action-gh-release@v1        
-        with:
-          tag_name: Release
-          name: "SuKiSu Release ${{ env.KSUVER }}"
+        uses: softprops/action-gh-release@v1
+        with:          tag_name: Release          name: "SuKiSu Release ${{ env.KSUVER }}"
           body: |
             Build Details:
             - CPU: ${{ github.event.inputs.CPU }}
             - FEIL: ${{ github.event.inputs.FEIL }}
             - KSU Version: ${{ env.KSUVER }}
-            draft: false
-            prerelease: false
-            files: |
-              ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+          draft: false
+          prerelease: false
+          files:
+            - ./AnyKernel3/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
+            - ./SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip
