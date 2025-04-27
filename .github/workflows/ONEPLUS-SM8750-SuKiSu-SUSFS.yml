@@ -199,23 +199,18 @@ jobs:
           rm -rf !("$target_dir")
           echo "目录结构验证：" && ls -l  # 添加调试信息
    
-      - name: Package Release to ZIP
+      - name: Package Release to ZIP                
         run: |
-          cd ./AnyKernel3 || { echo "❌ 错误：AnyKernel3 目录不存在"; exit 1; }
-          echo "当前目录内容：" && ls -la
-          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"
-          echo "目标 ZIP 文件: ${target_zip}"
-
-          temp_dir=$(mktemp -d)
-          anykernel_dir=$(pwd)  # 获取 AnyKernel3 的绝对路径
-          rsync -av --progress "${anykernel_dir}/SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" "$temp_dir/" || { echo "❌ rsync 同步失败"; exit 1; }
-          (cd "$temp_dir" && zip -r "../${target_zip}" ./*)  # 注意路径调整
-          rm -rf "$temp_dir"
+          cd ./AnyKernel3 || { echo "&#10060; 错误：AnyKernel3 目录不存在"; exit 1; }
+          echo "当前目录内容：" && ls -la          target_zip="SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}.zip"          
+          echo "目标 ZIP 文件: ${target_zip}"          # 直接打包目标子目录（保持目录结构）
+          zip -r "${target_zip}" "SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}/" \
+            && echo "&#9989; ZIP 打包成功" \            || { echo "&#10060; ZIP 打包失败"; exit 1; }
           echo "生成ZIP文件大小：" && ls -lh "${target_zip}"
 
-      - name: Create Release and Upload Assets
+      - name: Create Release and Upload Assets        
         if: ${{ success() }}
-        uses: softprops/action-gh-release@v1  # 明确声明 uses 字段
+        uses: softprops/action-gh-release@v1        
         with:
           tag_name: Release
           name: "SuKiSu Release ${{ env.KSUVER }}"
