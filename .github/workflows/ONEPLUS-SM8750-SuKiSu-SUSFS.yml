@@ -168,11 +168,7 @@ jobs:
          
       - name: Make AnyKernel3
         run: |
-         if [ "${{ github.event.inputs.FEIL }}" = "oneplus_ace5_pro" ]; then
-          git clone -b a5p https://github.com/JiuGeFaCai/AnyKernel3.git --depth=1
-         else
-          git clone https://github.com/JiuGeFaCai/AnyKernel3.git --depth=1
-         fi
+         git clone https://github.com/JiuGeFaCai/AnyKernel3.git --depth=1      
          rm -rf ./AnyKernel3/.git
          rm -rf ./AnyKernel3/push.sh
          cp kernel_workspace/kernel_platform/dist/Image ./AnyKernel3/
