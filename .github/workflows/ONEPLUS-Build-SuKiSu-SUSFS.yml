@@ -77,8 +77,7 @@ jobs:
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
          export KSU_VERSION=$KSU_VERSION
-         sed -i "s/DKSU_VERSION=12500/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
-        
+         
       - name: Set up susfs
         run: |
            cd kernel_workspace
@@ -139,22 +138,24 @@ jobs:
       - name: Add make name
         run: |
          cd kernel_workspace/kernel_platform
-         sed -i '$s|echo "\$res"|echo "\${{ github.event.inputs.KERNEL_NAME }}"|' ./common/scripts/setlocalversion
+         #sed -i '$s|echo "\$res"|echo "\${{ github.event.inputs.KERNEL_NAME }}"|' ./common/scripts/setlocalversion
            
       - name: Build kernel
         run: |
          cd kernel_workspace
          if [ -e ./kernel_platform/build/build.sh ]; then
-         LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
-         elif [ "${{ github.event.inputs.CPU }}" = "sm8750" ]; then
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh sun perf
+         LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki    
          else
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
+         tools/bazel run --config=fast --config=stamp --lto=thin //common:kernel_aarch64_dist -- --dist_dir=dist
          fi
 
       - name: Make AnyKernel3
         run: |
-         cd kernel_workspace/out/dist/
+         if [ "${{ github.event.inputs.KERNEL_VERSION }}" = "6.1" ]; then
+           cd kernel_workspace/kernel_platform/dist/
+         else
+           cd kernel_workspace/out/dist/
+         fi
          curl -LO https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
          chmod +x patch_linux
          ./patch_linux
