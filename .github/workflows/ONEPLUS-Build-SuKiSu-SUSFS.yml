@@ -162,6 +162,12 @@ jobs:
          ./patch_linux
          rm -f Image
          mv oImage Image
+         OUTDIR=kernel_workspace/out/dist
+         if [ ! -e $OUTDIR ]; then
+           OUTDIR=kernel_workspace/kernel_platform/dist
+         fi
+         mkdir output
+         cp $OUTDIR/Image ./output/
          
       - name: Make AnyKernel3
         run: |
@@ -183,8 +189,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
          name: Image_SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}
-         if: ${{ github.event.inputs.KERNEL_VERSION == '6.1' }}
-           path: kernel_workspace/kernel_platform/dist/Image
-         else
-           path: kernel_workspace/out/dist/Image
-         fi
+         path: ./output/*
