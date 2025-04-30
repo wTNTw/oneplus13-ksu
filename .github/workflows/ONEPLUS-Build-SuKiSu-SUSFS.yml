@@ -183,7 +183,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
          name: Image_SuKiSu_${{ env.KSUVER }}_${{ github.event.inputs.FEIL }}
-         if [ "${{ github.event.inputs.KERNEL_VERSION }}" = "6.1" ]; then
+         if: ${{ github.event.inputs.KERNEL_VERSION == '6.1' }}
            path: kernel_workspace/kernel_platform/dist/Image
          else
            path: kernel_workspace/out/dist/Image
