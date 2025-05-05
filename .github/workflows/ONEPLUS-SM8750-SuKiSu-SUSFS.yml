@@ -158,7 +158,11 @@ jobs:
          cd kernel_workspace/kernel_platform/common/drivers
          git clone https://github.com/JiuGeFaCai/sched_ext.git
          rm -rf ./sched_ext/.git
-         printf "\nobj-y                              += sched_ext/\n" >> Makefile
+   # 添加一个简单的Makefile如果不存在
+         if [ ! -f ./sched_ext/Makefile ]; then
+          echo "obj-y := sched_ext.o" > ./sched_ext/Makefile
+         fi
+         printf "\nobj-y += sched_ext/\n" >> Makefile
          
            
       - name: Build kernel
