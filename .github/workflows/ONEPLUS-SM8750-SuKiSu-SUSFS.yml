@@ -179,7 +179,7 @@ jobs:
          
       - name: Make AnyKernel3
         run: |
-         git clone https://github.com/JiuGeFaCai/AnyKernel3.git --depth=1      
+         git clone https://github.com/Numbersf/AnyKernel3.git --depth=1      
          rm -rf ./AnyKernel3/.git
          rm -rf ./AnyKernel3/push.sh
          cp kernel_workspace/kernel_platform/dist/Image ./AnyKernel3/
